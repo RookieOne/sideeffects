@@ -8,7 +8,9 @@ var logger = function(req, res, next) {
   next()
 }
 
+
 app.use(logger)
+app.use(require('connect-livereload')())
 app.use(serveStatic(__dirname + "/build"))
 app.listen(3000)
 

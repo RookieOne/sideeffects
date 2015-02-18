@@ -9,6 +9,7 @@ var rename = require("gulp-rename")
 
 var DEST = "build"
 var src = {
+  app: 'app/**/*.js',
   files: "app/*.html"
 }
 
@@ -27,17 +28,18 @@ gulp.task("app", function() {
   var bundle = function() {
     return bundler
       .bundle()
-      .pipe(source("./app/routes.js"))
-      .pipe(rename("main.js"))
+      .pipe(source('app.js'))
+      // .pipe(source("./app/routes.js"))
+      // .pipe(rename("main.js"))
       .pipe(gulp.dest("./build"))
       .pipe(livereload())
   }
 
-  var bundler = browserify("./app/routes.js", watchify.args)
-  bundler.transform(to5ify)
+  var bundler = watchify(browserify("./app/routes.js", watchify.args))
   bundler.transform(reactify)
+  bundler.transform(to5ify)
   bundler.on("update", bundle)
-  bundler = watchify(bundler)
+  // bundler = watchify(bundler)
 
   return bundle()
 })
